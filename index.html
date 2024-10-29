@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EA 2 - 2D Geometrie mit WebGL</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body data-bs-spy="scroll" data-bs-target=".navbar" data-bs-offset="70">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">EA 2 - 2D Geometrie mit WebGL</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#blume">Blume des Lebens</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#documentationSection">Dokumentation</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5 pt-5" id="mainContent">
+        <section id="blume" class="mb-4">
+            <h2>Blume des Lebens</h2>
+            <canvas id="webglCanvas" width="600" height="600"></canvas>
+        </section>
+
+        <section id="documentationSection" class="mb-4">
+            <h2>Dokumentation</h2>
+
+            <p>In dieser Aufgabe wurde ein Programm entwickelt, das die geometrische Figur "Blume des Lebens" mithilfe von WebGL im HTML-Canvas zeichnet. Dafür werden Kreise in einem festgelegten Muster angeordnet. Die Technik umfasst folgende Schritte:</p>
+            
+            <ol>
+                <li>
+                    <strong>Initialisierung des WebGL-Kontexts:</strong> WebGL wird über das HTML-Canvas-Element initialisiert. Durch den Zugriff auf <code>canvas.getContext("webgl")</code> wird der Kontext erzeugt, welcher für die Grafikerstellung in WebGL notwendig ist. Falls der WebGL-Kontext nicht unterstützt wird, gibt das Programm eine Benachrichtigung aus.
+                </li>
+                <li>
+                    <strong>Shader-Programmierung:</strong>
+                    <ul>
+                        <li><strong>Vertex-Shader:</strong> Der Vertex-Shader wird verwendet, um die Positionen der Punkte im Raum festzulegen. Hier nimmt der Shader die 2D-Koordinaten (<code>aPosition</code>) entgegen und projiziert diese in den Raum, ohne sie zu verändern (<code>gl_Position = vec4(aPosition, 0.0, 1.0);</code>).</li>
+                        <li><strong>Fragment-Shader:</strong> Der Fragment-Shader setzt die Farbe des Objekts. In diesem Fall wurde eine cyanfarbene Linie (<code>vec4(0.0, 0.8, 0.8, 1.0)</code>) gewählt, die die Ränder der Kreise darstellt.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Shader-Kompilierung und Programmverlinkung:</strong> Die Shader werden kompiliert und in ein WebGL-Programm eingebunden. Wenn bei der Kompilierung oder dem Linken Fehler auftreten, werden entsprechende Fehlermeldungen in die Konsole ausgegeben.
+                </li>
+                <li>
+                    <strong>Erstellung der Geometrie:</strong>
+                    <ul>
+                        <li><strong>Kreiskoordinaten:</strong> Für jeden Kreis werden die 2D-Koordinaten durch die Funktion <code>createCircleVertices</code> berechnet. Diese Funktion verwendet trigonometrische Berechnungen, um <code>numPoints</code>-viele Punkte auf dem Rand eines Kreises mit definiertem Radius zu erstellen.</li>
+                        <li><strong>Musteranordnung:</strong> Die Blume des Lebens entsteht durch eine wiederholte Anordnung von Kreisen um einen zentralen Punkt. In der ersten Schicht sind die Kreise in hexagonaler Form um einen zentralen Kreis gruppiert. Weitere Schichten entstehen durch die weitere Platzierung von Kreisen entlang derselben hexagonalen Struktur. Hier wird die Wurzel von 3 (<code>sqrt3</code>) verwendet, um den vertikalen Abstand der Kreise in einem gleichseitigen Dreieck korrekt zu berechnen.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Rendering der Kreise:</strong> Für jeden Kreis wird ein separater Datenpuffer erstellt und die Vertices in diesen geladen. WebGL rendert die Kreise mit der <code>gl.drawArrays(gl.LINE_LOOP, 0, vertices.length / 2);</code>-Methode, die alle Punkte eines Kreises als Linie darstellt, wobei die erste und die letzte Linie verbunden sind und somit einen Kreis bilden.
+                </li>
+            </ol>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
